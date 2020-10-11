@@ -10,7 +10,9 @@
     position: relative;
     display: inline-block;
     cursor: move;
-    margin: 0 auto;
+	margin: 0 auto;
+	top: 10%;
+    left: 23%;
 }
 
 .resize-container-ontop {
@@ -151,16 +153,22 @@
 }
 
 .btn {
-	padding: 6px 10px;
-	background-color: rgb(222,60,80);
+	padding: 15px 35px;
+	background-color: #33bbff;
 	border: none;
 	border-radius: 5px;
-	color: #FFF;
+	font-weight: 600;
 	margin:10px 5px;
 	line-height:30px;
+	font-size: large;
 }
 
 .btn-crop img {
 	vertical-align: middle;
 	margin-left: 8px;
+}
+
+.right{
+	display: flex;
+  justify-content: center;
 }

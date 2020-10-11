@@ -1,8 +1,8 @@
-var resizeableImage = function(image_target) {
+var resizeableImage = function(imageTarget) {
   // Some variable and settings
   var $container,
   orig_src = new Image(),
-  image_target = $(image_target).get(0),
+  imageTarget = $(imageTarget).get(0),
   event_state = {},
   constrain = false,
   min_width = 60, // Change as required
@@ -10,36 +10,17 @@ var resizeableImage = function(image_target) {
   max_width = 1800, // Change as required
   max_height = 1900,
   init_height=500,
-  resize_canvas = document.createElement('canvas');
+  resizeCanvas = document.createElement('canvas');
   imageData=null;
 
   init = function(){
   
-  //load a file with html5 file api
-	$('.js-loadfile').change(function(evt) {
-		var files = evt.target.files; // FileList object
-		var reader = new FileReader();
-
-		reader.onload = function(e) {
-		  imageData=reader.result;
-		  loadData();
-		}
-		reader.readAsDataURL(files[0]);
-	});
-	
-	//add the reset evewnthandler
-	$('.js-reset').click(function() {
-		if(imageData)
-			loadData();
-	});
-	
-
-    // When resizing, we will always use this copy of the original as the base
-    orig_src.src=image_target.src;
+      // When resizing, we will always use this copy of the original as the base
+    orig_src.src=imageTarget.src;
 
     // Wrap the image with the container and add resize handles
-    $(image_target).height(init_height)
-	.wrap('<div class="resize-container"></div>')
+    $(imageTarget).height(init_height)
+    .wrap('<div class="resize-container"></div>')
     .before('<span class="resize-handle resize-handle-nw"></span>')
     .before('<span class="resize-handle resize-handle-ne"></span>')
     .after('<span class="resize-handle resize-handle-se"></span>')
@@ -53,27 +34,10 @@ var resizeableImage = function(image_target) {
     // Add events
     $container.on('mousedown touchstart', '.resize-handle', startResize);
     $container.on('mousedown touchstart', '.resize-container-ontop', startMoving);
-    $('.js-crop').on('click', crop);
+    $('.crop').on('click', crop);
   };
   
-  loadData = function() {
-			
-	//set the image target
-	image_target.src=imageData;
-	orig_src.src=image_target.src;
-	
-	//set the image tot he init height
-	$(image_target).css({
-		width:'auto',
-		height:init_height
-	});
-	
-	
-	//resize the canvas
-	$(orig_src).bind('load',function() {
-		resizeImageCanvas($(image_target).width(),$(image_target).height());
-	});
-  };
+  
   
   startResize = function(e){
     e.preventDefault();
@@ -84,7 +48,7 @@ var resizeableImage = function(image_target) {
   };
 
   endResize = function(e){
-	resizeImageCanvas($(image_target).width(), $(image_target).height())
+	resizeImageCanvas($(imageTarget).width(), $(imageTarget).height())
     e.preventDefault();
     $(document).off('mouseup touchend', endResize);
     $(document).off('mousemove touchmove', resizing);
@@ -160,15 +124,15 @@ var resizeableImage = function(image_target) {
   }
 
   resizeImage = function(width, height){
-	$(image_target).width(width).height(height);
+	$(imageTarget).width(width).height(height);
   };
   
   resizeImageCanvas = function(width, height){
-    resize_canvas.width = width;
-    resize_canvas.height = height;
-    resize_canvas.getContext('2d').drawImage(orig_src, 0, 0, width, height);   
-    $(image_target).attr('src', resize_canvas.toDataURL("image/png"));  
-	//$(image_target).width(width).height(height);
+    resizeCanvas.width = width;
+    resizeCanvas.height = height;
+    resizeCanvas.getContext('2d').drawImage(orig_src, 0, 0, width, height);   
+    $(imageTarget).attr('src', resizeCanvas.toDataURL("image/png"));  
+	//$(imageTarget).width(width).height(height);
   };
 
   startMoving = function(e){
@@ -224,24 +188,24 @@ var resizeableImage = function(image_target) {
 
   crop = function(){
     //Find the part of the image that is inside the crop box
-    var crop_canvas,
+    var cropCanvas,
         left = $('.overlay').offset().left- $container.offset().left,
         top =  $('.overlay').offset().top - $container.offset().top,
         width = $('.overlay').width(),
         height = $('.overlay').height();
 		
-    crop_canvas = document.createElement('canvas');
+    cropCanvas = document.createElement('canvas');
 	
-    crop_canvas.width = width;
-    crop_canvas.height = height;
+    cropCanvas.width = width;
+    cropCanvas.height = height;
 	
-    crop_canvas.getContext('2d').drawImage(image_target, left, top, width, height, 0, 0, width, height);
-	var dataURL=crop_canvas.toDataURL("image/png");
-	image_target.src=dataURL;
-	orig_src.src=image_target.src;
+    cropCanvas.getContext('2d').drawImage(imageTarget, left, top, width, height, 0, 0, width, height);
+	var dataURL=cropCanvas.toDataURL("image/png");
+	imageTarget.src=dataURL;
+	orig_src.src=imageTarget.src;
 	
 	
-	$(image_target).bind("load",function() {
+	$(imageTarget).bind("load",function() {
 		$(this).css({
 			width:width,
 			height:height
@@ -250,11 +214,25 @@ var resizeableImage = function(image_target) {
 			left:$('.overlay').offset().left- $('.crop-wrapper').offset().left
 		})
 	});
-    //window.open(crop_canvas.toDataURL("image/png"));
   }
 
   init();
 };
 
 // Kick everything off with the target image
-resizeableImage($('.resize-image'));
+resizeableImage($('.resizeImage'));
+
+
+// TO download the image
+$('.download').click(function() {
+  var croppedimage = document.getElementsByClassName("resizeImage");
+  console.log(croppedimage[0].src)
+    const image = croppedimage[0].src;
+    var link = document.createElement('a');
+    link.download = "my-image.png";
+    link.href = image;
+    link.click();
+});
+
+
+  
