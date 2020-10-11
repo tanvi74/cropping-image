@@ -213,9 +213,15 @@ var resizeableImage = function(imageTarget) {
 			top:$('.overlay').offset().top- $('.crop-wrapper').offset().top,
 			left:$('.overlay').offset().left- $('.crop-wrapper').offset().left
 		})
-	});
-  }
+  });
 
+  var val = Math.floor((Math.random() * 100) + 1);
+  console.log(val);
+ 
+  var value = `${window.location.href}?${val}`;
+  console.log(value);
+  window.history.pushState("object or string", "Title", value);
+  }
   init();
 };
 
@@ -226,7 +232,7 @@ resizeableImage($('.resizeImage'));
 // TO download the image
 $('.download').click(function() {
   var croppedimage = document.getElementsByClassName("resizeImage");
-  console.log(croppedimage[0].src)
+  // console.log(croppedimage[0].src)
     const image = croppedimage[0].src;
     var link = document.createElement('a');
     link.download = "my-image.png";
@@ -235,4 +241,23 @@ $('.download').click(function() {
 });
 
 
+// const mementos = []
+// var croppedimage = document.getElementsByClassName("resizeImage");
+
+// function saveMemento() {
+//   mementos.push(croppedimage)
+// }
+
+// function undo() {
+//   const lastMemento = mementos.pop()
+//   console.log(lastMemento)
+//   croppedimage = lastMemento ? lastMemento : croppedimage
+// }
+
+
+// function goBack() {
+//   var croppedimage = document.getElementsByClassName("resizeImage");
+//   croppedimage.undo();
+//   window.history.back();
+// }
   
